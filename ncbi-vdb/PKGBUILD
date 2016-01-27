@@ -7,7 +7,7 @@ pkgrel=1
 pkgdesc="The SRA Toolkit and SDK from NCBI is a collection of tools and libraries for using data in the INSDC Sequence Read Archives."
 arch=('x86_64')
 url="https://github.com/ncbi/ncbi-vdb"
-depends=('libxml2' 'ngs')
+depends=('libxml2' 'ngs' 'hdf5')
 provides=('ncbi-vdb')
 license=('custom:PublicDomain')
 source=("https://github.com/ncbi/ncbi-vdb/archive/$pkgver.tar.gz" "$pkgname.patch")
@@ -17,7 +17,7 @@ prepare(){
   cd "${pkgname}-${pkgver}"
   # ncbi build process frequently checks if we are root user which interferes 
   #   with makepkg use of fakeroot
-  patch -p1 -i $srcdir/$pkgname.patch 
+  patch -p1 -i "$srcdir/$pkgname.patch"
 }
 
 build(){
@@ -36,5 +36,8 @@ package(){
   # ncbi does not use autoconf/automake so there is no respect for DESTDIR
   #   but there is a ROOT(dir)
   make "ROOT=$pkgdir" install
-  mv $pkgdir/usr/lib64 $pkgdir/usr/lib
+  mv "$pkgdir/usr/lib64" "$pkgdir/usr/lib"
+
+  # the source of this package is required by others
+  cp -r . "$pkgdir/usr/src"
 }
