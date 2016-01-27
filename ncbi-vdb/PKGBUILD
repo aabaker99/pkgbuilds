@@ -7,11 +7,18 @@ pkgrel=1
 pkgdesc="The SRA Toolkit and SDK from NCBI is a collection of tools and libraries for using data in the INSDC Sequence Read Archives."
 arch=('x86_64')
 url="https://github.com/ncbi/ncbi-vdb"
-depends=('')
+depends=('libxml2' 'ngs')
 provides=('ncbi-vdb')
 license=('custom:PublicDomain')
 source=("https://github.com/ncbi/ncbi-vdb/archive/$pkgver.tar.gz")
 sha256sums=('e088717270a48f070d5aeb633558e778081c70e5c42e5e621d6a5b8f3c2c5e41')
+
+prepare(){
+  cd "${pkgname}-${pkgver}"
+  # ncbi build process frequently checks if we are root user which interferes 
+  #   with makepkg use of fakeroot
+  patch -p1 -i $srcdir/$pkgname.patch 
+}
 
 build(){
   cd "${pkgname}-${pkgver}"
@@ -26,5 +33,5 @@ check(){
 
 package(){
   cd "$pkgname-$pkgver"
-  make install
+  make "ROOT=$pkgdir" install
 }
