@@ -1,0 +1,3 @@
+The following message is output during makepkg:
+  NOTE - library libkdf5 cannot be built: It requires 'libhdf5' and its development headers.
+it is probably due to attempts to link to libhdf5 as a static library
