@@ -23,7 +23,7 @@ prepare(){
 
 build(){
   cd "${pkgname}-${pkgver}"
-  ./configure
+  ./configure --prefix="$pkgdir/usr/" --with-ngs-sdk-prefix=/usr --with-ncbi-vdb-sources=/usr/src/ncbi-vdb-2.5.7
   make
 }
 
@@ -34,5 +34,5 @@ check(){
 
 package(){
   cd "$pkgname-$pkgver"
-  make DESTDIR="$pkgdir/" install
+  make "ROOT=$pkgdir" install
 }
