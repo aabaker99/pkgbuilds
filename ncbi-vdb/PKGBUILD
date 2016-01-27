@@ -10,8 +10,8 @@ url="https://github.com/ncbi/ncbi-vdb"
 depends=('libxml2' 'ngs')
 provides=('ncbi-vdb')
 license=('custom:PublicDomain')
-source=("https://github.com/ncbi/ncbi-vdb/archive/$pkgver.tar.gz")
-sha256sums=('e088717270a48f070d5aeb633558e778081c70e5c42e5e621d6a5b8f3c2c5e41')
+source=("https://github.com/ncbi/ncbi-vdb/archive/$pkgver.tar.gz" "$pkgname.patch")
+sha256sums=('e088717270a48f070d5aeb633558e778081c70e5c42e5e621d6a5b8f3c2c5e41' '19f09b19cad2ebd4df4185022e711f9bc32898926168d234833e56d70c2d2029')
 
 prepare(){
   cd "${pkgname}-${pkgver}"
@@ -33,5 +33,8 @@ check(){
 
 package(){
   cd "$pkgname-$pkgver"
+  # ncbi does not use autoconf/automake so there is no respect for DESTDIR
+  #   but there is a ROOT(dir)
   make "ROOT=$pkgdir" install
+  mv $pkgdir/usr/lib64 $pkgdir/usr/lib
 }
