@@ -1,0 +1,30 @@
+# This is the PKGBUILD for ncbi-vdb
+# Maintainer: Aaron Baker <aa{last name}99{at}gmail{dt}org>
+
+pkgname=ncbi-vdb
+pkgver=2.5.7
+pkgrel=1
+pkgdesc="The SRA Toolkit and SDK from NCBI is a collection of tools and libraries for using data in the INSDC Sequence Read Archives."
+arch=('x86_64')
+url="https://github.com/ncbi/ncbi-vdb"
+depends=('')
+provides=('ncbi-vdb')
+license=('custom:PublicDomain')
+source=("https://github.com/ncbi/ncbi-vdb/archive/$pkgver.tar.gz")
+sha256sums=('e088717270a48f070d5aeb633558e778081c70e5c42e5e621d6a5b8f3c2c5e41')
+
+build(){
+  cd "${pkgname}-${pkgver}"
+  ./configure --prefix="$pkgdir/usr/"
+  make
+}
+
+check(){
+  cd "${pkgname}-${pkgver}"
+  make -k test
+}
+
+package(){
+  cd "$pkgname-$pkgver"
+  make install
+}

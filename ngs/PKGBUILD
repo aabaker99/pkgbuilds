@@ -1,0 +1,39 @@
+# This is the PKGBUILD for ngs
+# Maintainer: Aaron Baker <aa{last name}99{at}gmail{dt}org>
+
+pkgname=ngs
+pkgver=1.2.3
+pkgrel=1
+pkgdesc="NGS is a new, domain-specific API for accessing reads, alignments and pileups produced from Next Generation Sequencing."
+arch=('x86_64')
+url="https://github.com/ncbi/ngs"
+depends=('jre8-openjdk' 'perl-file-copy-recursive')
+provides=('ngs')
+license=('custom:PublicDomain')
+source=("https://github.com/ncbi/ngs/archive/$pkgver.tar.gz" "package.patch")
+sha256sums=('625ec04737dea787f3800744f1d5fddb4d83b21013c281bcbc8691149b230794' '9e4356666dbe7fc01dfcfaad914b108777164c464a77776742fae78da369a352')
+
+prepare(){
+  cd "${pkgname}-${pkgver}"
+  # ncbi build process frequently checks if we are root user which interferes 
+  #   with makepkg use of fakeroot
+  patch -p1 -i $srcdir/package.patch 
+}
+
+build(){
+  cd "${pkgname}-${pkgver}"
+  ./configure --prefix="$pkgdir/usr/"
+  make
+}
+
+check(){
+  cd "${pkgname}-${pkgver}"
+  make -k test
+}
+
+package(){
+  cd "$pkgname-$pkgver"
+  # ncbi does not use autoconf/automake so there is no respect for DESTDIR
+  #   but there is a ROOT(dir)
+  make "ROOT=$pkgdir" install
+}

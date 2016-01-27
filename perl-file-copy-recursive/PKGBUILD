@@ -1,0 +1,36 @@
+# This is the PKGBUILD for perl-file-copy-recursive
+# Maintainer: Aaron Baker <aa{last name}99{at}gmail{dt}org>
+
+pkgname=perl-file-copy-recursive
+pkgver=0.38
+pkgrel=1
+pkgdesc="Perl extension for recursively copying files and directories"
+_dist=File-Copy-Recursive
+arch=('any')
+url="http://search.cpan.org/~dmuey/File-Copy-Recursive-$pkgver/"
+depends=('perl')
+provides=('perl-file-copy-recursive')
+license=('PerlArtistic')
+source=("http://search.cpan.org/CPAN/authors/id/D/DM/DMUEY/File-Copy-Recursive-$pkgver.tar.gz")
+sha256sums=('84ccbddf3894a88a2c2b6be68ff6ef8960037803bb36aa228b31944cfdf6deeb')
+
+build(){
+  cd "$srcdir/$_dist-$pkgver"
+  unset PERL5LIB PERL_MM_OPT PERL_LOCAL_LIB_ROOT
+  export PERL_MM_USE_DEFAULT=1 PERL_AUTOINSTALL=--skipdeps
+  /usr/bin/perl Makefile.PL
+  make
+}
+
+check() {
+  cd "$srcdir/$_dist-$pkgver"
+  unset PERL5LIB PERL_MM_OPT PERL_LOCAL_LIB_ROOT
+  export PERL_MM_USE_DEFAULT=1
+  make test
+}
+
+package() {
+  cd "$srcdir/$_dist-$pkgver"
+  unset PERL5LIB PERL_MM_OPT PERL_LOCAL_LIB_ROOT
+  make install INSTALLDIRS=vendor DESTDIR="$pkgdir"
+}
