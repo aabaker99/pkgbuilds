@@ -39,5 +39,6 @@ package(){
   mv "$pkgdir/usr/lib64" "$pkgdir/usr/lib"
 
   # the source of this package is required by others
-  cp -r . "$pkgdir/usr/src"
+  mkdir -p "$pkgdir/usr/src/${pkgname}-${pkgver}"
+  cp -r . "$pkgdir/usr/src/${pkgname}-${pkgver}"
 }
