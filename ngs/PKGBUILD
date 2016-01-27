@@ -39,4 +39,5 @@ package(){
   # ncbi does not use autoconf/automake so there is no respect for DESTDIR
   #   but there is a ROOT(dir)
   make "ROOT=$pkgdir" install
+  mv $pkgdir/usr/lib64 $pkgdir/usr/lib
 }
